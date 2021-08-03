@@ -4,69 +4,22 @@ using BackEnd.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BackEnd.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    partial class AplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210723020418_v1.1")]
+    partial class v11
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("BackEnd.Domain.Models.AnswerQuestionnaireDetails", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AnswerQuestionnairesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AnswersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnswerQuestionnairesId");
-
-                    b.HasIndex("AnswersId");
-
-                    b.ToTable("AnswerQuestionnaireDetails");
-                });
-
-            modelBuilder.Entity("BackEnd.Domain.Models.AnswerQuestionnaires", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Active")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ParticipantName")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int>("QuestionnairesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionnairesId");
-
-                    b.ToTable("AnswerQuestionnaires");
-                });
 
             modelBuilder.Entity("BackEnd.Domain.Models.Answers", b =>
                 {
@@ -164,40 +117,10 @@ namespace BackEnd.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("BackEnd.Domain.Models.AnswerQuestionnaireDetails", b =>
-                {
-                    b.HasOne("BackEnd.Domain.Models.AnswerQuestionnaires", "AnswerQuestionnaire")
-                        .WithMany("AnswerQuestionnaireDetail")
-                        .HasForeignKey("AnswerQuestionnairesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd.Domain.Models.Answers", "Answers")
-                        .WithMany()
-                        .HasForeignKey("AnswersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AnswerQuestionnaire");
-
-                    b.Navigation("Answers");
-                });
-
-            modelBuilder.Entity("BackEnd.Domain.Models.AnswerQuestionnaires", b =>
-                {
-                    b.HasOne("BackEnd.Domain.Models.Questionnaires", "Questionnaires")
-                        .WithMany()
-                        .HasForeignKey("QuestionnairesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Questionnaires");
-                });
-
             modelBuilder.Entity("BackEnd.Domain.Models.Answers", b =>
                 {
                     b.HasOne("BackEnd.Domain.Models.Questions", "Question")
-                        .WithMany("answerList")
+                        .WithMany("Answer")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -219,7 +142,7 @@ namespace BackEnd.Migrations
             modelBuilder.Entity("BackEnd.Domain.Models.Questions", b =>
                 {
                     b.HasOne("BackEnd.Domain.Models.Questionnaires", "Questionnaire")
-                        .WithMany("questionList")
+                        .WithMany("Question")
                         .HasForeignKey("QuestionnaireId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -227,19 +150,14 @@ namespace BackEnd.Migrations
                     b.Navigation("Questionnaire");
                 });
 
-            modelBuilder.Entity("BackEnd.Domain.Models.AnswerQuestionnaires", b =>
-                {
-                    b.Navigation("AnswerQuestionnaireDetail");
-                });
-
             modelBuilder.Entity("BackEnd.Domain.Models.Questionnaires", b =>
                 {
-                    b.Navigation("questionList");
+                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("BackEnd.Domain.Models.Questions", b =>
                 {
-                    b.Navigation("answerList");
+                    b.Navigation("Answer");
                 });
 #pragma warning restore 612, 618
         }

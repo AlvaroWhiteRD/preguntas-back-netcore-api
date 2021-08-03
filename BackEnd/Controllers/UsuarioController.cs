@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using BackEnd.Domain.IServices;
 using BackEnd.Domain.Models;
 using BackEnd.DTO;
 using BackEnd.Utils;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,17 +25,18 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Usuario usuario)
+        public async Task<IActionResult> Post([FromBody] Users user)
         {
             try
             {
-                var validateExistence = await _usuarioService.ValidateExistence(usuario);
+                var validateExistence = await _usuarioService.ValidateExistence(user);
                 if (validateExistence)
                 {
-                    return BadRequest(new { message ="El usuario " + usuario.NombreUsuario + " ya existe!" } );
+                    return BadRequest(new { message ="El usuario " + user.Username + " ya existe!" } );
                 }
-                usuario.Password = Encriptar.EncriptarPassword(usuario.Password);
-                await _usuarioService.SaveUser(usuario);
+
+                user.Password = EncryptedPassword.EncryptedPasswords(user.Password);
+                await _usuarioService.SaveUser(user);
 
                 return Ok(new { message = "Usuario registrado con exito!" });
             }
@@ -43,24 +47,27 @@ namespace BackEnd.Controllers
             }
         }
 
-        // localhost:xxx/api/Usuario/CambiarPassword
-        [Route("CambiarPassowrd")]
+        [Route("changes-password")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
-        public async Task<IActionResult> CambiarPassword([FromBody] CambiarPasswordDTO cambiarPassword)
+        public async Task<IActionResult> CambiarPassword([FromBody] ChangesPasswordDTO changePassword)
         {
             try
             {
-                int idUsuario = 13;
-                string passwordEncriptado = Encriptar.EncriptarPassword(cambiarPassword.passwordAnterior);
-                var usuario = await _usuarioService.ValidatePassword(idUsuario, passwordEncriptado);
-                if(usuario == null)
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+                int idUsuario = JwtConfirator.GetTokenIdUser(identity);
+
+                string encryptedPassword = EncryptedPassword.EncryptedPasswords(changePassword.BackPassword);
+                var user = await _usuarioService.ValidatePassword(idUsuario, encryptedPassword);
+                if(user == null)
                 {
-                    return BadRequest(new { message = "La password es incrorrecta" });
+                    return BadRequest(new { message = "La contraseña es incrorrecta" });
                 } else
                 {
-                    usuario.Password = Encriptar.EncriptarPassword(cambiarPassword.nuevaPassword);
-                    await _usuarioService.UpdatePassword(usuario);
-                    return Ok(new { message = "La password fue actualizada con exito!" });
+                    user.Password = EncryptedPassword.EncryptedPasswords(changePassword.NewPassword);
+                    await _usuarioService.UpdatePassword(user);
+                    return Ok(new { message = "La contraseña fue actualizada con exito!" });
 
                 }
 

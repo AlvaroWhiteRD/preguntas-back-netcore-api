@@ -8,6 +8,6 @@ namespace BackEnd.Domain.IServices
 {
     public interface ILoginService
     {
-        Task<Usuario> ValidateUser(Usuario usuario);
+        Task<Users> ValidateUser(Users usuario);
     }
 }

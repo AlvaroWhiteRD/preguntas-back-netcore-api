@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Domain.Models
 {
-    public class Usuario
+    public class Users
     {
         public int Id { get; set; }
 
         [Required]
         [Column(TypeName ="varchar(20)")]
-        public string NombreUsuario { get; set; }
+        public string Username { get; set; }
 
         [Required]
-        [Column(TypeName = "varchar(50)")]
+        [Column(TypeName = "varchar(250)")]
         public string Password { get; set; }
     }
 }

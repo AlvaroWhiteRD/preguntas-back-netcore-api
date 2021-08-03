@@ -8,6 +8,6 @@ namespace BackEnd.Domain.IRepositories
 {
     public interface ILoginRepository
     {
-        Task<Usuario> ValidateUser(Usuario usuario);
+        Task<Users> ValidateUser(Users usuario);
     }
 }

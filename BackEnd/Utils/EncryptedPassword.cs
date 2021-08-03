@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Utils
 {
-    public static class Encriptar
+    public static class EncryptedPassword
     {
-        public static string EncriptarPassword(string input)
+        public static string EncryptedPasswords(string input)
         {
             MD5 md5Hash = MD5.Create();
             // Convert the input string to a byte array and compute the hash.

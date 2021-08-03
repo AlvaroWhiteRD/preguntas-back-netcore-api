@@ -17,28 +17,28 @@ namespace BackEnd.Persistence.Repositories
             _context = context;
         }
 
-        public async Task SaveUser(Usuario usuario) 
+        public async Task SaveUser(Users user) 
         {
-            _context.Add(usuario);
+            _context.Add(user);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> ValidateExistence(Usuario usuario)
+        public async Task<bool> ValidateExistence(Users user)
         {
-            var validateExistence = await _context.Usuario.AnyAsync(x => x.NombreUsuario == usuario.NombreUsuario);
+            var validateExistence = await _context.Users.AnyAsync(x => x.Username == user.Username);
             return validateExistence;
         }
 
-        public async Task<Usuario> ValidatePassword(int idUsuario, string passwordAnterior)
+        public async Task<Users> ValidatePassword(int userId, string backPassword)
         {
-            var usuario = await _context.Usuario.Where(x => x.Id == idUsuario && x.Password == passwordAnterior).FirstOrDefaultAsync();
-            return usuario;
+            var user = await _context.Users.Where(x => x.Id == userId && x.Password == backPassword).FirstOrDefaultAsync();
+            return user;
 
         }
 
-        public async Task UpdatePassword(Usuario usuario)
+        public async Task UpdatePassword(Users user)
         {
-            _context.Update(usuario);
+            _context.Update(user);
             await _context.SaveChangesAsync();
         }
     }

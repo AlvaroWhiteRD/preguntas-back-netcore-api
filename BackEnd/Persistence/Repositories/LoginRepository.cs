@@ -17,9 +17,9 @@ namespace BackEnd.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<Usuario> ValidateUser(Usuario usuario)
+        public async Task<Users> ValidateUser(Users usuario)
         {
-            var user = await _context.Usuario.Where(x => x.NombreUsuario == usuario.NombreUsuario
+            var user = await _context.Users.Where(x => x.Username == usuario.Username
                                                 && x.Password == usuario.Password).FirstOrDefaultAsync();
             return user;
         }

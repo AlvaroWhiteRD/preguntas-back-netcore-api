@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace BackEnd.DTO
 {
-    public class CambiarPasswordDTO
+    public class ChangesPasswordDTO
     {
-        public string passwordAnterior { get; set; }
-        public string nuevaPassword { get; set; }
+        public string BackPassword { get; set; }
+        public string NewPassword { get; set; }
     }
 }

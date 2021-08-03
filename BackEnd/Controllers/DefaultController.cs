@@ -12,7 +12,6 @@ namespace BackEnd.Controllers
     [ApiController]
     public class DefaultController : ControllerBase
     {
-        // GET: api/<DefaultController>
         [HttpGet]
         public string Get()
         {

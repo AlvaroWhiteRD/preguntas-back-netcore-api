@@ -8,9 +8,9 @@ namespace BackEnd.Domain.IServices
 {
     public interface IUsuarioService
     {
-        Task SaveUser(Usuario usuario);
-        Task<bool> ValidateExistence(Usuario usuario);
-        Task<Usuario> ValidatePassword(int idUsuario, string passwordAnterior);
-        Task UpdatePassword(Usuario usuario);
+        Task SaveUser(Users usuario);
+        Task<bool> ValidateExistence(Users usuario);
+        Task<Users> ValidatePassword(int idUsuario, string passwordAnterior);
+        Task UpdatePassword(Users usuario);
     }
 }
